@@ -4,9 +4,7 @@ import com.ma.de.domain.Event;
 import com.ma.de.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +19,8 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @RequestMapping("/events/{location}")
+    @CrossOrigin
+    @GetMapping("/events/{location}")
     public List<Event> getEventsForLocation(@PathVariable String location) {
 
         if(StringUtils.isEmpty(location)){
