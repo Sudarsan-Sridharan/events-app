@@ -33,7 +33,7 @@ public class EventfulServiceImpl implements EventService {
 
     private String URL = "http://api.eventful.com/json/events/search" +
             "?app_key=" + applicationKey +
-            "&location={location}&page_size=20";
+            "&location=%s&page_size=20";
 
     //TODO pagination is included in remote service now for assignment reason I limit to first 20
 
@@ -41,13 +41,16 @@ public class EventfulServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsForLocation(String location) {
+        List<Event> list = Collections.EMPTY_LIST;
+        String fullURL = String.format(URL, location);
 
-        logger.info("Getting result for " + URL + " | location: " + location);
+        logger.info("Getting result for " + fullURL);
 
-        Map<String, String> vars = Collections.singletonMap("location", location);
-        EventfulSearchResult queryResult = restTemplate.getForObject(URL, EventfulSearchResult.class, vars);
+        EventfulSearchResult queryResult = restTemplate.getForObject(fullURL, EventfulSearchResult.class);
 
-        List<Event> list =  queryResult.getEvents().getEvent();
+        if(queryResult.getEvents() != null){
+            list =  queryResult.getEvents().getEvent();
+        }
         logger.info("Total items matching criteria: " + queryResult.getTotalItems() + " returning: " + list.size());
 
         return list;
